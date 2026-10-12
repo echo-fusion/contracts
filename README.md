@@ -1,31 +1,47 @@
-# EchoFusion Contracts
+# Contracts
+
+[![CI](https://github.com/echo-fusion/contracts/actions/workflows/ci.yml/badge.svg)](https://github.com/echo-fusion/contracts/actions/workflows/ci.yml) [![Packagist](https://img.shields.io/packagist/v/echo-fusion/contracts.svg)](https://packagist.org/packages/echo-fusion/contracts) [![PHP](https://img.shields.io/badge/php-8.1%20%7C%208.2%20%7C%208.3-777bb4.svg)](https://www.php.net) [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 Welcome to the EchoFusion Contracts repository! This package defines the core interfaces and abstractions that are shared across the EchoFusion framework, ensuring consistency and flexibility in how components interact with each other.
 
-## Install
+> Part of [EchoFusion](https://github.com/echo-fusion), a modular PHP framework built from small packages.
 
-Via Composer
+## Installation
 
-``` bash
-$ composer require echo-fusion/contracts
+```bash
+composer require echo-fusion/contracts
 ```
 
 ## Requirements
 
-The following versions of PHP are supported by this version.
+* PHP 8.1, 8.2 or 8.3
 
-* PHP 8.1
-* PHP 8.2
-* PHP 8.3
+## What is inside
+
+Every interface lives in the namespace `EchoFusion\Contracts\<Package>`. A package depends on this one instead of on another concrete package, so any implementation can be swapped for another.
+
+| Namespace | Interfaces | Implemented by |
+| --- | --- | --- |
+| `AuthManager` | `AuthManagerInterface`, `GuardInterface`, `StatefulGuardInterface`, `UserInterface`, `UserProviderInterface`, `PasswordHasherInterface` | [authmanager](https://github.com/echo-fusion/authmanager) |
+| `ConfigManager` | `ConfigInterface` | [configmanager](https://github.com/echo-fusion/configmanager) |
+| `DatabaseManager` | `ConnectionInterface`, `DatabaseManagerInterface` | [databasemanager](https://github.com/echo-fusion/databasemanager) |
+| `EventManager` | `EventInterface`, `EventManagerInterface` | [eventmanager](https://github.com/echo-fusion/eventmanager) |
+| `MiddlewareManager` | `MiddlewareManagerInterface`, `MiddlewarePipelineInterface` | [middlewaremanager](https://github.com/echo-fusion/middlewaremanager) |
+| `ModuleManager` | `ModuleInterface`, `ModuleManagerInterface` | [modulemanager](https://github.com/echo-fusion/modulemanager) |
+| `PluginManager` | `PluginInterface`, `PluginManagerInterface` | [pluginmanager](https://github.com/echo-fusion/pluginmanager) |
+| `RouteManager` | `RouterInterface`, `RouteInterface`, `RouteMatchInterface`, `RouteMatcherInterface`, `RouteLoaderInterface` | [routemanager](https://github.com/echo-fusion/routemanager) |
+| `ServiceManager` | `ServiceManagerInterface`, `SettableContainerInterface` | [servicemanager](https://github.com/echo-fusion/servicemanager) |
+| `ServiceProvider` | `ServiceProviderInterface` | any package that registers services |
+| `SessionManager` | `SessionInterface` | [sessionmanager](https://github.com/echo-fusion/sessionmanager) |
+| `TemplateManager` | `TemplateEngineInterface`, `TemplateManagerInterface` | [templatemanager](https://github.com/echo-fusion/templatemanager) |
 
 ## Usage
 
-The EchoFusion Contracts package provides interfaces that are widely used across the EchoFusion ecosystem. The goal is to provide a set of reusable and extensible contracts to ensure all EchoFusion components follow a consistent structure and behavior.
-
-For example, to use the ServiceProviderInterface in your application, you can implement it within your custom service providers:
+Implement an interface in your own code, or type-hint it so any implementation can be passed in. For example, a service provider:
 
 ```php
-use EchoFusion\Contracts\ServiceProviderInterface;
-use EchoFusion\Contracts\ServiceManagerInterface;
+use EchoFusion\Contracts\ServiceManager\ServiceManagerInterface;
+use EchoFusion\Contracts\ServiceProvider\ServiceProviderInterface;
 
 class MyServiceProvider implements ServiceProviderInterface
 {
@@ -41,14 +57,20 @@ class MyServiceProvider implements ServiceProviderInterface
 }
 ```
 
+## Versioning
+
+Contracts follow [semantic versioning](https://semver.org). A new interface or class is a minor release. Adding a method to an existing interface is a breaking change and needs a new major version.
+
+## Testing
+
+```bash
+composer test
+```
+
 ## Credits
 
-Developed and maintained by [Amir Shadanfar](https://github.com/amir-shadanfar).  
-Connect on [LinkedIn](https://www.linkedin.com/in/amir-shadanfar).
+- [Amir Shadanfar](https://github.com/amir-shadanfar)
 
 ## License
 
-The MIT License (MIT). Please see [License File](https://github.com/echo-fusion/servicemanager/blob/main/LICENSE) for more information.
-
-
-
+The MIT License (MIT). Please see [LICENSE](LICENSE) for more information.

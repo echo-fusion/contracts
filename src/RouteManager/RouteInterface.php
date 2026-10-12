@@ -6,39 +6,32 @@ namespace EchoFusion\Contracts\RouteManager;
 
 use Closure;
 
+/**
+ * A route definition. It is a value: it is created complete and never changes.
+ */
 interface RouteInterface
 {
     public function getMethod(): string;
 
-    public function setMethod(string $method): self;
-
+    /**
+     * @return non-empty-string
+     */
     public function getName(): string;
 
     /**
-     * @param non-empty-string $name
+     * @return array<array-key, mixed>|Closure
      */
-    public function setName(string $name): self;
-
     public function getAction(): array|Closure;
 
     /**
-     * @param array<string,non-empty-string>|Closure $action
+     * @return list<class-string>
      */
-    public function setAction(array|Closure $action): self;
-
     public function getMiddlewares(): array;
 
     /**
-     * @param list<class-string> $middlewares
+     * @return array<string, non-empty-string>|null
      */
-    public function setMiddlewares(string ...$middlewares): self;
-
     public function getConstraints(): ?array;
-
-    /**
-     * @param array<string, non-empty-string> $constraints
-     */
-    public function setConstraints(?array $constraints): self;
 
     public function getPath(): string;
 }

@@ -25,11 +25,11 @@ Every interface lives in the namespace `EchoFusion\Contracts\<Package>`. A packa
 | `AuthManager` | `AuthManagerInterface`, `GuardInterface`, `StatefulGuardInterface`, `UserInterface`, `UserProviderInterface`, `PasswordHasherInterface` | [authmanager](https://github.com/echo-fusion/authmanager) |
 | `ConfigManager` | `ConfigInterface` | [configmanager](https://github.com/echo-fusion/configmanager) |
 | `DatabaseManager` | `ConnectionInterface`, `DatabaseManagerInterface` | [databasemanager](https://github.com/echo-fusion/databasemanager) |
-| `EventManager` | `EventInterface`, `EventManagerInterface` | [eventmanager](https://github.com/echo-fusion/eventmanager) |
+| `EventManager` | `EventInterface` (a PSR-14 stoppable event), `EventManagerInterface` (a PSR-14 dispatcher and listener provider) | [eventmanager](https://github.com/echo-fusion/eventmanager) |
 | `MiddlewareManager` | `MiddlewareManagerInterface`, `MiddlewarePipelineInterface` | [middlewaremanager](https://github.com/echo-fusion/middlewaremanager) |
 | `ModuleManager` | `ModuleInterface`, `ModuleManagerInterface` | [modulemanager](https://github.com/echo-fusion/modulemanager) |
-| `PluginManager` | `PluginInterface`, `PluginManagerInterface` | [pluginmanager](https://github.com/echo-fusion/pluginmanager) |
-| `RouteManager` | `RouterInterface`, `RouteInterface`, `RouteMatchInterface`, `RouteMatcherInterface`, `RouteLoaderInterface` | [routemanager](https://github.com/echo-fusion/routemanager) |
+| `PluginManager` | `PluginInterface` (receives the container), `PluginManagerInterface` | [pluginmanager](https://github.com/echo-fusion/pluginmanager) |
+| `RouteManager` | `RouterInterface` (find a route), `RouteRegistrarInterface` (register routes), `RouteInterface` (immutable definition), `RouteMatchInterface`, `RouteMatcherInterface`, `RouteLoaderInterface` | [routemanager](https://github.com/echo-fusion/routemanager) |
 | `ServiceManager` | `ServiceManagerInterface`, `SettableContainerInterface` | [servicemanager](https://github.com/echo-fusion/servicemanager) |
 | `ServiceProvider` | `ServiceProviderInterface` | any package that registers services |
 | `SessionManager` | `SessionInterface` | [sessionmanager](https://github.com/echo-fusion/sessionmanager) |
@@ -56,6 +56,17 @@ class MyServiceProvider implements ServiceProviderInterface
     }
 }
 ```
+
+## Upgrading from 1.x to 2.0
+
+| Change | What to do |
+| --- | --- |
+| `RouterInterface` no longer has `get()`, `post()` ... `options()` | They moved to `RouteRegistrarInterface`. Type-hint it where you register routes; the `Router` of routemanager implements both. |
+| `RouteInterface` has no setters | Routes are values: create them complete (`new Route($name, $method, $path, $action, ...)`). |
+| `EventManagerInterface` is a PSR-14 dispatcher | Call `dispatch($event)`; `trigger()` is gone from the interface. `detach()` is part of it. `EventInterface` extends PSR-14's `StoppableEventInterface`. |
+| `PluginInterface::register()` receives a container | `register(SettableContainerInterface $container)`. |
+
+Every other interface is unchanged, so packages that do not use the ones above only need their `echo-fusion/contracts` constraint widened to `^1.x || ^2.0`.
 
 ## Versioning
 
